@@ -37,6 +37,10 @@ const router = createBrowserRouter([
     {
         path: "/:id",
         element: <BusinessCard/>,
+    },
+    {
+      path: "/",
+      element: <BusinessCard/>,
     }
 ])
 
