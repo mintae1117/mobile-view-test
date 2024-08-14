@@ -122,7 +122,8 @@ const MoreBtnDiv = styled.div`
 const MoreBtn = styled.div`
     width: 85px;
     height: 85px;
-    background-color: gray;
+    background-color: #fafafa;
+    border: 1px solid rgb(231, 233, 239);
     border-radius: 16px;
 `;
 
@@ -140,6 +141,7 @@ const ProfileVideo = styled.iframe`
 
 const DownloadBtnDiv = styled.div`
     width: 100%;
+    z-index: 3;
     position: fixed;
     bottom: 0;
     padding-top: 17px;
