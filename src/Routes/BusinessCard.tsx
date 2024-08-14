@@ -69,6 +69,7 @@ const ProfileLikeBtn = styled.button`
     font-family: 'NexaRegular', sans-serif;
     min-width: 60px;
     min-height: 32px;
+    color: black;
     font-size: 13px;
     line-height: 17px;
     padding: 8px;
