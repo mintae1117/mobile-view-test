@@ -17,6 +17,7 @@ const TitleWrapper = styled.div`
     align-items: center;
     justify-content: center;
     font-size: 18px;
+    border-bottom: 1px solid rgb(231, 233, 239);
 `;
 
 const ProfileWrapper = styled.div`
@@ -43,9 +44,10 @@ const ProfilePhoto = styled.div`
     top: 140px;
     width: 110px;
     height: 110px;
-    background-color: rgb(193, 193, 193);
+    background-color: #fafafa;
     border-radius: 30px;
     z-index: 2;
+    border: 1px solid rgb(231, 233, 239);
 `;
 const ProfileName = styled.h3`
     font-size: 22px;
@@ -56,6 +58,24 @@ const ProfileAddress = styled.p`
 `;
 const ProfileText = styled.p`
     font-size: 11px;
+`;
+const ProfileLikeBtn = styled.button`
+    @font-face {
+        font-family: 'NexaRegular';
+        src: url('/Fonts/Nexa-Regular.otf') format('opentype');
+        font-weight: normal;
+        font-style: normal;
+    }
+    font-family: 'NexaRegular', sans-serif;
+    min-width: 60px;
+    min-height: 32px;
+    font-size: 13px;
+    line-height: 17px;
+    padding: 8px;
+    border-radius: 25px;
+    border: 1px solid black;
+    outline: none;
+    background-color: white;
 `;
 
 const ProfileBackgroundArch = styled.div`
@@ -144,9 +164,8 @@ const DownloadBtn = styled.button`
 const DivideBar = styled.div`
     width: 90%;
     height: 1px;
-    border-style: solid;
-    border-width: 1px;
-    border-color: rgba(0, 0, 0, 0.13);
+    background-color: rgb(231, 233, 239);
+    border-radius: 2px;
     margin-top: 33px;
     margin-bottom: 33px;
 `;
@@ -203,7 +222,7 @@ function BusinessCard(){
             </TitleWrapper>
             <ProfileWrapper>
                 <ProfileBackgroundArch>
-                    <h2>URL Id : {id}</h2>
+                    {id && <h2>URL Id : {id}</h2>}
                     <ProfileArch/>
                 </ProfileBackgroundArch>
                 <ProfileContentWrapper>
@@ -212,7 +231,7 @@ function BusinessCard(){
                     <ProfileAddress>현대자동차 강남논현 지점 영업 1팀</ProfileAddress>
                     <ProfileText>서울특별시 서초구 강남대로 586 1, 4층 현대자동차</ProfileText>
                     <ProfileText>연락가능 시간 : 평일 오전 9시 - 오후 6시</ProfileText>
-                    <button>236</button>
+                    <ProfileLikeBtn>235</ProfileLikeBtn>
                     <MoreBtnWrapper>
                         <MoreBtnDiv>
                             <MoreBtn/>
