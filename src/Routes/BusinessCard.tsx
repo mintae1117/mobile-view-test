@@ -1,5 +1,7 @@
 import styled from "styled-components";
-import {useParams} from "react-router";
+import {useNavigate, useParams} from "react-router";
+import { useState, useEffect } from 'react';
+import ContactModal from "../Components/ContactModal.tsx";
 
 const BusinessWrapper = styled.div`
     display: flex;
@@ -66,6 +68,7 @@ const ProfileLikeBtn = styled.button`
         font-weight: normal;
         font-style: normal;
     }
+    cursor: pointer;
     font-family: 'NexaRegular', sans-serif;
     min-width: 60px;
     min-height: 32px;
@@ -120,6 +123,7 @@ const MoreBtnDiv = styled.div`
 `;
 
 const MoreBtn = styled.div`
+    cursor: pointer;
     width: 85px;
     height: 85px;
     background-color: #fafafa;
@@ -154,6 +158,7 @@ const DownloadBtnDiv = styled.div`
 `;
 
 const DownloadBtn = styled.button`
+    cursor: pointer;
     border: 1px solid #747775;
     border-radius: 54px;
     width: 90%;
@@ -208,6 +213,7 @@ const SliderWrapper = styled.div`
 `;
 
 const SliderImg = styled.img`
+    cursor: pointer;
     width: 220px;
     height: 332px;
     border: 1px solid black;
@@ -215,8 +221,54 @@ const SliderImg = styled.img`
 
 function BusinessCard(){
     const {id} = useParams();
+    const navigate = useNavigate();
+
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const openModal = () => setIsModalOpen(true);
+    const closeModal = () => setIsModalOpen(false);
+
+    const phoneNum = "01022458201";
+
+    useEffect(() => {
+        // 모달이 열릴 때 배경 스크롤을 막음
+        if (isModalOpen) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = '';
+        }
+
+        // 컴포넌트 언마운트 시 원래 상태로 되돌림
+        return () => {
+            document.body.style.overflow = '';
+        };
+    }, [isModalOpen]);
+
+    const navigateMapRoute = () => {
+        if(id !== undefined){
+            navigate('BusinessCardMap', {
+                state: {
+                    latitude: "123",
+                    longitude: "321",
+                }
+            });
+        }
+    };
+
     return(
         <BusinessWrapper>
+            <ContactModal isOpen={isModalOpen} onClose={closeModal}>
+                <h2>문의하기 모달</h2>
+                <p>모달 안의 내용</p>
+                <SliderImg
+                    src={"https://www.newploy.net/wp-content/uploads/2023/05/%EB%A9%94%EC%9D%B8%ED%99%94%EB%A9%B4-%EC%9D%BC%EB%9F%AC%EC%8A%A4%ED%8A%B8.png"}
+                    alt={"tmp"}/>
+                <SliderImg
+                    src={"https://www.newploy.net/wp-content/uploads/2023/05/%EB%A9%94%EC%9D%B8%ED%99%94%EB%A9%B4-%EC%9D%BC%EB%9F%AC%EC%8A%A4%ED%8A%B8.png"}
+                    alt={"tmp"}/>
+                <SliderImg
+                    src={"https://www.newploy.net/wp-content/uploads/2023/05/%EB%A9%94%EC%9D%B8%ED%99%94%EB%A9%B4-%EC%9D%BC%EB%9F%AC%EC%8A%A4%ED%8A%B8.png"}
+                    alt={"tmp"}/>
+            </ContactModal>
             <DownloadBtnDiv>
                 <DownloadBtn>연락처 저장하기</DownloadBtn>
             </DownloadBtnDiv>
@@ -237,15 +289,15 @@ function BusinessCard(){
                     <ProfileLikeBtn>235</ProfileLikeBtn>
                     <MoreBtnWrapper>
                         <MoreBtnDiv>
-                            <MoreBtn/>
+                            <MoreBtn onClick={openModal}/>
                             <MoreBtnText>메시지 남기기</MoreBtnText>
                         </MoreBtnDiv>
                         <MoreBtnDiv>
-                            <MoreBtn/>
+                            <a href={`tel:${phoneNum}`}><MoreBtn/></a>
                             <MoreBtnText>전화걸기</MoreBtnText>
                         </MoreBtnDiv>
                         <MoreBtnDiv>
-                            <MoreBtn/>
+                            <MoreBtn onClick={navigateMapRoute}/>
                             <MoreBtnText>찾아오시는 길</MoreBtnText>
                         </MoreBtnDiv>
                     </MoreBtnWrapper>
@@ -265,9 +317,15 @@ function BusinessCard(){
                 </IntroduceText>
             </IntroduceWrapper>
             <SliderWrapper>
-                <SliderImg src={"https://www.newploy.net/wp-content/uploads/2023/05/%EB%A9%94%EC%9D%B8%ED%99%94%EB%A9%B4-%EC%9D%BC%EB%9F%AC%EC%8A%A4%ED%8A%B8.png"}  alt={"tmp"}/>
-                <SliderImg src={"https://www.newploy.net/wp-content/uploads/2023/05/%EB%A9%94%EC%9D%B8%ED%99%94%EB%A9%B4-%EC%9D%BC%EB%9F%AC%EC%8A%A4%ED%8A%B8.png"}  alt={"tmp"}/>
-                <SliderImg src={"https://www.newploy.net/wp-content/uploads/2023/05/%EB%A9%94%EC%9D%B8%ED%99%94%EB%A9%B4-%EC%9D%BC%EB%9F%AC%EC%8A%A4%ED%8A%B8.png"}  alt={"tmp"}/>
+                <SliderImg
+                    src={"https://www.newploy.net/wp-content/uploads/2023/05/%EB%A9%94%EC%9D%B8%ED%99%94%EB%A9%B4-%EC%9D%BC%EB%9F%AC%EC%8A%A4%ED%8A%B8.png"}
+                    alt={"tmp"}/>
+                <SliderImg
+                    src={"https://www.newploy.net/wp-content/uploads/2023/05/%EB%A9%94%EC%9D%B8%ED%99%94%EB%A9%B4-%EC%9D%BC%EB%9F%AC%EC%8A%A4%ED%8A%B8.png"}
+                    alt={"tmp"}/>
+                <SliderImg
+                    src={"https://www.newploy.net/wp-content/uploads/2023/05/%EB%A9%94%EC%9D%B8%ED%99%94%EB%A9%B4-%EC%9D%BC%EB%9F%AC%EC%8A%A4%ED%8A%B8.png"}
+                    alt={"tmp"}/>
             </SliderWrapper>
         </BusinessWrapper>
     );
