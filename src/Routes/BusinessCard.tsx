@@ -226,13 +226,13 @@ const ContactWrapper = styled.div`
     align-items: center;
     justify-content: center;
     text-align: center;
-    width: 85%;
+    width: 90%;
     padding-top: 30px;
     gap: 20px;
 `;
 
 const ContactTitle = styled.p`
-    font-size: 20px;
+    font-size: 19px;
     line-height: 22px;
 `;
 
