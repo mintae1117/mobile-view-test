@@ -2,6 +2,7 @@ import styled from "styled-components";
 import {useNavigate, useParams} from "react-router";
 import { useState, useEffect } from 'react';
 import ContactModal from "../Components/ContactModal.tsx";
+import {Link} from "react-router-dom";
 
 const BusinessWrapper = styled.div`
     display: flex;
@@ -219,6 +220,112 @@ const SliderImg = styled.img`
     border: 1px solid black;
 `;
 
+const ContactWrapper = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    width: 85%;
+    padding-top: 30px;
+    gap: 20px;
+`;
+
+const ContactTitle = styled.p`
+    font-size: 20px;
+    line-height: 22px;
+`;
+
+const ContactInput = styled.input`
+    width: 100%;
+    height: 56px;
+    margin-bottom: 20px;
+`;
+
+const ContactSelect = styled.div`
+    display: flex;
+    align-items: center;
+    position: relative;
+    margin-bottom: 20px;
+
+    > select {
+        font-family: 'NanumSquareNeo', sans-serif;
+        height: 60px;
+        width: 100%;
+        min-width: 100px;
+        font-size: 18px;
+        padding: 15px;
+        color: #7a7a7a;
+        border-color: #ccccd7;
+        border-style: solid;
+        border-width: 1px;
+        appearance: none;
+        background: none;
+        z-index: 1;
+
+        &:focus {
+            outline: none;
+            border-color: #14d762;
+        }
+    }
+
+    > img {
+        position: absolute;
+        right: 25px;
+        pointer-events: none;
+        width: 20px;
+        height: auto;
+        filter: invert(100%) grayscale(100%);
+    }
+`;
+
+const ContactTextArea = styled.textarea`
+    width: 100%;
+    height: 136px;
+    resize: none;
+`;
+
+const ContactLaw = styled.div`
+    color: #bfbfbf;
+    font-size: 10px;
+    max-width: 272px;
+`;
+
+
+const ContactLink = styled(Link)`
+    color: #bfbfbf;
+    font-size: 10px;
+    text-decoration: underline;
+    &:visited {
+        color: inherit;
+    }
+    &:hover {
+        color: #0ec556;
+    }
+    &:active {
+        color: inherit;
+    }
+    &:focus {
+        color: inherit;
+    }
+`;
+
+const ContactSubmitBtn = styled.button`
+    width: 195px;
+    height: 50px;
+    font-size: 20px;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    color: white;
+    border: none;
+    border-radius: 3px;
+    background-color: rgb(20, 215, 98);
+    cursor: pointer;
+    &:hover{
+        background-color: #0ec556;
+    }
+`;
+
 function BusinessCard(){
     const {id} = useParams();
     const navigate = useNavigate();
@@ -257,17 +364,36 @@ function BusinessCard(){
     return(
         <BusinessWrapper>
             <ContactModal isOpen={isModalOpen} onClose={closeModal}>
-                <h2>문의하기 모달</h2>
-                <p>모달 안의 내용</p>
-                <SliderImg
-                    src={"https://www.newploy.net/wp-content/uploads/2023/05/%EB%A9%94%EC%9D%B8%ED%99%94%EB%A9%B4-%EC%9D%BC%EB%9F%AC%EC%8A%A4%ED%8A%B8.png"}
-                    alt={"tmp"}/>
-                <SliderImg
-                    src={"https://www.newploy.net/wp-content/uploads/2023/05/%EB%A9%94%EC%9D%B8%ED%99%94%EB%A9%B4-%EC%9D%BC%EB%9F%AC%EC%8A%A4%ED%8A%B8.png"}
-                    alt={"tmp"}/>
-                <SliderImg
-                    src={"https://www.newploy.net/wp-content/uploads/2023/05/%EB%A9%94%EC%9D%B8%ED%99%94%EB%A9%B4-%EC%9D%BC%EB%9F%AC%EC%8A%A4%ED%8A%B8.png"}
-                    alt={"tmp"}/>
+                <ContactWrapper>
+                    <ContactTitle>메시지를 남겨주시면, 가능한<br/>빠른시간 내에 연락드리겠습니다.</ContactTitle>
+                    <form>
+                        <ContactInput/>
+                        <ContactInput/>
+                        <ContactInput/>
+                        <ContactSelect>
+                            <select name="contactTime" id="contactTime" required >
+                                <option value="" disabled hidden>연락 가능한 시간 선택</option>
+                                <option value="11">오전 10시 부터 11시</option>
+                                <option value="12">오전 11시 부터 12시</option>
+                                <option value="13">오후 12시 부터 1시</option>
+                                <option value="14">오후 1시 부터 2시</option>
+                                <option value="15">오후 2시 부터 3시</option>
+                                <option value="16">오후 3시 부터 4시</option>
+                                <option value="17">오후 4시 부터 5시</option>
+                                <option value="18">오후 5시 부터 6시</option>
+                                <option value="19">오후 6시 부터 7시</option>
+                            </select>
+                            <img src="/Images/btn_arrow_down@3x.png" alt="dropDownLogo"/>
+                        </ContactSelect>
+                        <ContactTextArea/>
+                    </form>
+                    <ContactLaw>제출하신 개인정보는 당사 <ContactLink to={"https://www.newploy.net/privacy/"}>개인정보
+                        처리방침</ContactLink> 에 따라 안전하게 관리됩니다. 정보를 제출하시면 당사 <ContactLink
+                        to={"https://www.newploy.net/privacy/"}>개인정보 처리방침</ContactLink>과<br/><ContactLink
+                        to={"https://www.newploy.net/marketinguse/"}>마케팅 활용정보 제공</ContactLink>에 동의한것으로
+                        간주됩니다.</ContactLaw>
+                    <ContactSubmitBtn>제출하기</ContactSubmitBtn>
+                </ContactWrapper>
             </ContactModal>
             <DownloadBtnDiv>
                 <DownloadBtn>연락처 저장하기</DownloadBtn>

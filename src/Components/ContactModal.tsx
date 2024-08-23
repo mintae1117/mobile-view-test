@@ -1,7 +1,52 @@
 // src/components/Modal.tsx
 import React from 'react';
+import styled from 'styled-components';
 import { motion, Variants } from 'framer-motion';
-import './ContactModal.css'; // 스타일을 별도의 CSS 파일로 관리
+import { IoMdClose } from 'react-icons/io';
+
+const ModalOverlay = styled(motion.div)`
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+`;
+
+const ModalContent = styled(motion.div)`
+    position: fixed;
+    top: 6%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: white;
+    border-radius: 8px;
+    z-index: 1001;
+    width: 90%;
+    height: 88%;
+    max-width: 336pt;
+    overflow-y: scroll;
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+
+    &::-webkit-scrollbar {
+        display: none; /* Chrome, Safari */
+    }
+`;
+
+const PageCapWrapper = styled.div`
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    height: 69px;
+    color: white;
+    font-size: 27px;
+    background-color: rgb(20, 215, 98);
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px;
+`;
 
 interface ModalProps {
     isOpen: boolean;
@@ -20,15 +65,15 @@ const ContactModal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
 
     return (
         <>
-            <motion.div
+            <ModalOverlay
                 className="modal-overlay"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.3 }}
                 onClick={onClose}
-            ></motion.div>
-            <motion.div
+            ></ModalOverlay>
+            <ModalContent
                 className="modal-content"
                 variants={modalVariants}
                 initial="hidden"
@@ -36,9 +81,12 @@ const ContactModal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
                 exit="exit"
                 transition={{duration: 0.3}}
             >
-                <button onClick={onClose}>Close Modal</button>
+                <PageCapWrapper>
+                    <h3>문의하기</h3>
+                    <IoMdClose style={{fontSize:"35px", cursor:"pointer"}} onClick={onClose} />
+                </PageCapWrapper>
                 {children}
-            </motion.div>
+            </ModalContent>
         </>
     );
 }
