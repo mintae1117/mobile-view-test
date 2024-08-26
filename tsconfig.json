@@ -6,6 +6,7 @@
   ],
   "compilerOptions": {
     "types": ["vite/client"],
+    "jsx": "react",  // 또는 "react-jsx", "preserve" 중 선택
   },
   "include": ["src", "vite-env.d.ts"]  // "vite-env.d.ts" 파일이 포함되었는지 확인
 }
