@@ -1,8 +1,13 @@
 import styled from "styled-components";
 import {useNavigate, useParams} from "react-router";
-import { useState, useEffect } from 'react';
+import {useState, useEffect, FormEvent, ChangeEvent} from 'react';
 import ContactModal from "../Components/ContactModal.tsx";
 import {Link} from "react-router-dom";
+import dayjs from "dayjs";
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
+import axios from 'axios';
+import './BusinessCard.css';
 
 const BusinessWrapper = styled.div`
     display: flex;
@@ -239,7 +244,20 @@ const ContactTitle = styled.p`
 const ContactInput = styled.input`
     width: 100%;
     height: 56px;
+    padding: 15px;
+    font-size: 18px;
+    font-family: 'NanumSquareNeo', sans-serif;
     margin-bottom: 20px;
+    &::placeholder{
+        color: #7a7a7a;
+    }
+    border-color: #ccccd7;
+    border-style: solid;
+    border-width: 1px;
+    &:focus{
+        outline: none;
+        border-color: #14d762;
+    }
 `;
 
 const ContactSelect = styled.div`
@@ -283,11 +301,25 @@ const ContactTextArea = styled.textarea`
     width: 100%;
     height: 136px;
     resize: none;
+    padding: 15px;
+    font-size: 18px;
+    font-family: 'NanumSquareNeo', sans-serif;
+    &::placeholder{
+        color: #7a7a7a;
+    }
+    border-color: #ccccd7;
+    border-style: solid;
+    border-width: 1px;
+    &:focus{
+        outline: none;
+        border-color: #14d762;
+    }
 `;
 
 const ContactLaw = styled.div`
     color: #bfbfbf;
     font-size: 10px;
+    line-height: 12px;
     max-width: 272px;
 `;
 
@@ -326,7 +358,24 @@ const ContactSubmitBtn = styled.button`
     }
 `;
 
+interface ContactForm {
+    name: string;
+    message: string;
+    phoneNumber: string;
+    email: string;
+    contactTime: string;
+}
+
 function BusinessCard(){
+    const [contactForm, setContactForm] = useState<ContactForm>({
+        name: "",
+        message: "",
+        phoneNumber: "",
+        email: "",
+        contactTime: "",
+    });
+    const now = dayjs();
+    const MySwal = withReactContent(Swal);
     const {id} = useParams();
     const navigate = useNavigate();
 
@@ -335,6 +384,131 @@ function BusinessCard(){
     const closeModal = () => setIsModalOpen(false);
 
     const phoneNum = "01022458201";
+
+    const formatPhoneNumber = (value: string) => {
+        const cleaned = value.replace(/\D/g, '');
+        if (cleaned.length <= 10) {
+            return cleaned.replace(/^(\d{3})(\d{3})(\d{4})$/, '$1-$2-$3');
+        } else if (cleaned.length <= 11) {
+            return cleaned.replace(/^(\d{3})(\d{4})(\d{4})$/, '$1-$2-$3');
+        }
+        return value;
+    };
+
+    // Apply phone number formatting on change
+    useEffect(() => {
+        setContactForm((prevState) => ({
+            ...prevState,
+            phoneNumber: formatPhoneNumber(prevState.phoneNumber),
+        }));
+    }, [contactForm.phoneNumber]);
+
+    function handleInputChange(field: keyof ContactForm, event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) {
+        setContactForm((prevState) => ({
+            ...prevState,
+            [field]: event.target.value,
+        }));
+    }
+
+    const nowHour : number = +now.format("HH");
+    const selectedHour : number = +contactForm.contactTime;
+    let day : number = +now.format("DD");
+    if(selectedHour <= nowHour){
+        day++;
+    }
+    let aa = "";
+    if(selectedHour - 1 > 12){
+        aa = "오후";
+    } else {
+        aa = "오전";
+    }
+
+    const handleContactUs = async () => {
+        const baseUrl = import.meta.env.VITE_BASE_URL;
+        const salesStoreId = 364756;// 실서버용
+        //const salesStoreId = 346912;// 개발서버용
+        const url = `${baseUrl}/v1/sales/public/sales-stores/${salesStoreId}/sales-leads/contact-us`;
+        const data = {
+            name:contactForm.name,
+            phoneNumber: contactForm.phoneNumber,
+            email: contactForm.email,
+            message: contactForm.message,
+            contactTimes: `${now.format("YYYY")}년 ${now.format("MM")}월 ${day}일 ${aa} ${(selectedHour - 1) % 12 === 0 ? 12 : (selectedHour - 1) % 12 }시 부터 ${selectedHour % 12 === 0 ? 12 : selectedHour % 12}시`,
+            inboundRoute: 'FLOATING',// inboundRoute add
+        };
+        try {
+            const response = await axios.post(url, data, {
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+            console.log('Success:', response.data);
+            //alert("정상적으로 제출 되었습니다.");
+            MySwal.fire({
+                title: '<p style="font-size: 20px">정상적으로 제출 되었습니다.</p>',
+                customClass: {
+                    confirmButton: 'confirm-button',
+                },
+                confirmButtonText: '<p style="font-size: 20px; width: 100px">확인</p>',
+            }).then((result) => {
+                if(result.isConfirmed){
+                    closeModal();
+                }
+            });
+        } catch (error) {
+            if (axios.isAxiosError(error)) {
+                console.error('Error:', error.response ? error.response.data : error.message);
+                //alert("서버 문제로 제출에 실패했습니다. " + error.message);
+                MySwal.fire({
+                    title: `<p style="font-size: 20px">서버 문제로 제출에 실패했습니다. </p><p style="font-size: 20px">${error.message}</p>`,
+                    customClass: {
+                        confirmButton: 'confirm-button',
+                    },
+                    confirmButtonText: '<p style="font-size: 20px; width: 100px">확인</p>',
+                }).then((result) => {
+                    if(result.isConfirmed){
+                        closeModal();
+                    }
+                });
+            } else {
+                console.error('Unexpected Error:', error);
+                //alert('Unexpected Error: ' + error);
+                MySwal.fire({
+                    title: `<p style="font-size: 20px">Unexpected Error: </p><p style="font-size: 20px">${error}</p>`,
+                    customClass: {
+                        confirmButton: 'confirm-button',
+                    },
+                    confirmButtonText: '<p style="font-size: 20px; width: 100px">확인</p>',
+                }).then((result) => {
+                    if(result.isConfirmed){
+                        closeModal();
+                    }
+                });
+            }
+        }
+    };
+
+    const handleClick = () => {
+        MySwal.fire({
+            title: '<p style="font-size: 20px">제출하시겠습니까?</p>',
+            customClass: {
+                confirmButton: 'confirm-button',
+            },
+            showCancelButton: true,
+            confirmButtonText: '<p style="font-size: 20px; width: 100px">네</p>',
+            cancelButtonText: '<p style="font-size: 20px; width: 100px">아니요</p>',
+        }).then((result) => {
+            //console.log(result.isConfirmed);
+            if(result.isConfirmed){
+                handleContactUs();
+            }
+        });
+    };
+
+    function handleSubmit(event: FormEvent) {
+        event.preventDefault();// submit form 멈추기
+        handleClick()
+    }
 
     useEffect(() => {
         // 모달이 열릴 때 배경 스크롤을 막음
@@ -366,12 +540,12 @@ function BusinessCard(){
             <ContactModal isOpen={isModalOpen} onClose={closeModal}>
                 <ContactWrapper>
                     <ContactTitle>메시지를 남겨주시면, 가능한<br/>빠른시간 내에 연락드리겠습니다.</ContactTitle>
-                    <form>
-                        <ContactInput/>
-                        <ContactInput/>
-                        <ContactInput/>
+                    <form id={"contact"} onSubmit={handleSubmit}>
+                        <ContactInput onChange={(e) => handleInputChange("name", e)} value={contactForm.name} type={"text"} placeholder={"이름"} required/>
+                        <ContactInput onChange={(e) => handleInputChange("phoneNumber", e)} value={contactForm.phoneNumber} type={"tel"} placeholder={"연락 가능한 전화번호"} maxLength={20} required/>
+                        <ContactInput onChange={(e) => handleInputChange("email", e)} value={contactForm.email} type={"email"} placeholder={"이메일 주소"} required/>
                         <ContactSelect>
-                            <select name="contactTime" id="contactTime" required >
+                            <select name="contactTime" id="contactTime" required value={contactForm.contactTime} onChange={(e) => handleInputChange("contactTime", e)}>
                                 <option value="" disabled hidden>연락 가능한 시간 선택</option>
                                 <option value="11">오전 10시 부터 11시</option>
                                 <option value="12">오전 11시 부터 12시</option>
@@ -385,14 +559,14 @@ function BusinessCard(){
                             </select>
                             <img src="/Images/btn_arrow_down@3x.png" alt="dropDownLogo"/>
                         </ContactSelect>
-                        <ContactTextArea/>
+                        <ContactTextArea onChange={(e) => handleInputChange("message", e)} value={contactForm.message} placeholder={"메시지를 입력해주세요."} required/>
                     </form>
                     <ContactLaw>제출하신 개인정보는 당사 <ContactLink to={"https://www.newploy.net/privacy/"}>개인정보
                         처리방침</ContactLink> 에 따라 안전하게 관리됩니다. 정보를 제출하시면 당사 <ContactLink
                         to={"https://www.newploy.net/privacy/"}>개인정보 처리방침</ContactLink>과<br/><ContactLink
                         to={"https://www.newploy.net/marketinguse/"}>마케팅 활용정보 제공</ContactLink>에 동의한것으로
                         간주됩니다.</ContactLaw>
-                    <ContactSubmitBtn>제출하기</ContactSubmitBtn>
+                    <ContactSubmitBtn type={"submit"} form={"contact"}>제출하기</ContactSubmitBtn>
                 </ContactWrapper>
             </ContactModal>
             <DownloadBtnDiv>

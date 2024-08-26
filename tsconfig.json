@@ -3,5 +3,9 @@
   "references": [
     { "path": "./tsconfig.app.json" },
     { "path": "./tsconfig.node.json" }
-  ]
+  ],
+  "compilerOptions": {
+    "types": ["vite/client"],
+  },
+  "include": ["src", "vite-env.d.ts"]  // "vite-env.d.ts" 파일이 포함되었는지 확인
 }

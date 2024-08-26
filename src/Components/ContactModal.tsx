@@ -41,7 +41,7 @@ const PageCapWrapper = styled.div`
     width: 100%;
     height: 69px;
     color: white;
-    font-size: 27px;
+    font-size: 25px;
     background-color: rgb(20, 215, 98);
     align-items: center;
     justify-content: space-between;
