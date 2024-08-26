@@ -11,14 +11,21 @@
     "allowImportingTsExtensions": true,
     "isolatedModules": true,
     "moduleDetection": "force",
-    "noEmit": true,
     "jsx": "react-jsx",
+
+    /* Project references */
+    "composite": true,
+    "declaration": true,
+    "declarationMap": true,
 
     /* Linting */
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true
+    "noFallthroughCasesInSwitch": true,
+
+    /* Emit */
+    "noEmit": false
   },
   "include": ["src"]
 }
