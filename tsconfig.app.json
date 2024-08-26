@@ -11,15 +11,8 @@
     "allowImportingTsExtensions": true,
     "isolatedModules": true,
     "moduleDetection": "force",
-
-    /* Emit only declaration files */
-    "composite": true,
-    "declaration": true,
-    "declarationMap": true,
-    "emitDeclarationOnly": true,
-
-    /* JSX handling */
-    "jsx": "react",  // or "react-jsx" if you're using React 17+
+    "noEmit": true,
+    "jsx": "react-jsx",
 
     /* Linting */
     "strict": true,
