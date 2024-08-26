@@ -16,7 +16,10 @@
     "composite": true,
     "declaration": true,
     "declarationMap": true,
-    "emitDeclarationOnly": true,  // 여기서만 타입 선언 파일만 생성
+    "emitDeclarationOnly": true,
+
+    /* JSX handling */
+    "jsx": "react",  // or "react-jsx" if you're using React 17+
 
     /* Linting */
     "strict": true,

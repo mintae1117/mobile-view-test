@@ -5,8 +5,8 @@
     { "path": "./tsconfig.node.json" }
   ],
   "compilerOptions": {
-    "types": ["vite/client"],
-    "jsx": "react",  // 또는 "react-jsx", "preserve" 중 선택
+    "jsx": "react",  // or "react-jsx" depending on your React version
+    "types": ["vite/client"]
   },
-  "include": ["src", "vite-env.d.ts"]  // "vite-env.d.ts" 파일이 포함되었는지 확인
+  "include": ["src", "vite-env.d.ts"]  // Ensure "vite-env.d.ts" exists and is correct
 }
