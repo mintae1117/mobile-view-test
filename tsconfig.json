@@ -5,7 +5,7 @@
     { "path": "./tsconfig.node.json" }
   ],
   "compilerOptions": {
-    "jsx": "react",  // or "react-jsx" depending on your React version
+    "jsx": "react-jsx",
     "types": ["vite/client"]
   },
   "include": ["src", "vite-env.d.ts"]  // Ensure "vite-env.d.ts" exists and is correct
