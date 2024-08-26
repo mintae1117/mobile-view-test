@@ -11,21 +11,18 @@
     "allowImportingTsExtensions": true,
     "isolatedModules": true,
     "moduleDetection": "force",
-    "jsx": "react-jsx",
 
-    /* Project references */
+    /* Emit only declaration files */
     "composite": true,
     "declaration": true,
     "declarationMap": true,
+    "emitDeclarationOnly": true,  // 여기서만 타입 선언 파일만 생성
 
     /* Linting */
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true,
-
-    /* Emit */
-    "noEmit": false
+    "noFallthroughCasesInSwitch": true
   },
   "include": ["src"]
 }
